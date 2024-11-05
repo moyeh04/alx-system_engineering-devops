@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# Until Loop Syntax
+
+count=0
+
+until ((count == 10)); do
+	echo "Best School"
+	((count++))
+done
+
+# Another style of syntax
+#
+# until ["$count" -e 10]; do
+# 	echo "Best School"
+# 	((count++))
+# done
