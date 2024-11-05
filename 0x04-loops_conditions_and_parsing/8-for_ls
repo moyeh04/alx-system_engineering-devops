@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# Use Globs...
+# shellcheck disable=SC2034
+
+
+for file in *; do
+	[[ -f "$file" ]] && echo "$file" | cut -d "-" -f "2"
+done
