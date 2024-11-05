@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# Story of passwd
+
+IFS=":"
+
+while read -r username password userid groupid useridinfo homedir command_shell; do
+	echo "The user $username is part of the $groupid gang, lives in $homedir \
+and rides $command_shell. $userid's place is protected by the \
+passcode $password, more info about the user here: $useridinfo"
+		done < /etc/passwd
