@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+#It's about SSH and using the -i flag for specifying the private key
+ssh -i ~/.ssh/school ubuntu@52.91.106.209
