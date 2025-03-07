@@ -1,26 +1,43 @@
 server {
-        location /hbnb_static {alias /data/web_static/current/;index index.html;}
+    listen 80 default_server;
+    listen [::]:80 default_server;
 
-        add_header X-Served-By 392319-web-01;
-        listen 80 default_server;
-        listen [::]:80 default_server;
+    server_name _;
 
-        root /var/www/html;
+    # Static content (your other static routes)
+    location /hbnb_static {
+        alias /data/web_static/current/;
+        index index.html;
+    }
 
-        index index.html index.htm index.nginx-debian.html;
+    # Main block for your Flask app served via Gunicorn
+    location /airbnb-onepage/ {
+        proxy_pass http://127.0.0.1:5000;
+        proxy_redirect off;
+        proxy_set_header Host $host;
 
-        server_name _;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
 
-        location / {
-                try_files $uri $uri/ @404;
-        }
+    }
 
-        location /airbnb-onepage {
-                proxy_pass http://localhost:5000/airbnb-onepage;
-                proxy_redirect off;
-        }
+    # Fallback for non-matching URIs
 
-        location /redirect_me {return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;}
+    location / {
+        try_files $uri $uri/ @404;
+    }
 
-        location @404 {return 404 "Ceci n'est pas une page\n";}
+    location @404 {
+        return 404 "Ceci n'est pas une page\n";
+    }
+
+    # Extra configuration for a redirect (optional)
+    location /redirect_me {
+        return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
+    }
+
+    # Custom header (optional)
+    add_header X-Served-By 392319-web-01;
 }
+
